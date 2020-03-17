@@ -80,6 +80,7 @@ function update() {
   ctx.strokeRect(0, 0, canvas.width, canvas.height);  // outer frame
 
   command2velocity();
+  inverse_kinematics();
   updatePose();
 
   drawBarometer();

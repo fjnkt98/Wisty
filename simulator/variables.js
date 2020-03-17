@@ -23,3 +23,10 @@ const wheel_param = new Object();
 wheel_param.radius = 22;
 wheel_param.distance = 50;
 wheel_param.max_vel = 126.7;
+
+// Velocity of each wheel
+const wheel_vel = new Object();
+wheel_vel.v1 = 0.0;
+wheel_vel.v2 = 0.0;
+wheel_vel.v3 = 0.0;
+wheel_vel.v4 = 0.0;

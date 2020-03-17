@@ -32,5 +32,8 @@ function updatePose() {
 }
 
 function inverse_kinematics() {
-
+  wheel_vel.v1 = - velocity.x - velocity.y - 2 * wheel_param.distance * velocity.theta;
+  wheel_vel.v2 =   velocity.x - velocity.y - 2 * wheel_param.distance * velocity.theta;
+  wheel_vel.v3 =   velocity.x + velocity.y - 2 * wheel_param.distance * velocity.theta;
+  wheel_vel.v4 = - velocity.x + velocity.y - 2 * wheel_param.distance * velocity.theta;
 }
