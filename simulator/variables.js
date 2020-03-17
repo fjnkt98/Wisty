@@ -1,3 +1,5 @@
+const interval = 40;
+
 // Pose of robot
 const pose = new Object();
 pose.x = -500;    // [mm]

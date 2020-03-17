@@ -20,17 +20,35 @@ function drawRobot() {
   ctx.restore();
 }
 
-let i = 0;
+function drawBarometer() {
+  ctx.font = "20px sans";
+
+  ctx.fillText("pose", 20, 30);
+  ctx.fillText("x: " + pose.x, 140, 30);
+  ctx.fillText("y: " + pose.y, 140, 50);
+  ctx.fillText("theta: " + pose.theta, 100, 70);
+
+  ctx.fillText("velocity", 20, 120);
+  ctx.fillText("x: " + velocity.x, 140, 120);
+  ctx.fillText("y: " + velocity.y, 140, 140);
+  ctx.fillText("theta: " + velocity.theta, 100, 160);
+
+  ctx.fillText("command", 20, 200);
+  ctx.fillText("x: " + command.x, 140, 200);
+  ctx.fillText("y: " + command.y, 140, 220);
+  ctx.fillText("theta: " + command.theta, 100, 240);
+}
 
 function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
+  ctx.strokeRect(0, 0, canvas.width, canvas.height);  // outer frame
 
-  i++;
-  pose.x = -500 + 200 * Math.sin(i * 2 * Math.PI / 180);
-  pose.theta = i * 2 * Math.PI / 180;
+  command2velocity();
+  updatePose();
+
+  drawBarometer();
   drawRobot();
 }
 
 // 25[fps]
-setInterval(update, 40);
+setInterval(update, interval);
