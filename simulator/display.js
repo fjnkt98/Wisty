@@ -5,16 +5,52 @@ function drawRobot() {
   ctx.save();
   ctx.beginPath();
 
+  // rotation
   ctx.translate(-pose.y, -pose.x);
   ctx.rotate(-pose.theta);
   ctx.translate(pose.y, pose.x);
 
+  // draw robot body and wheel
   ctx.arc(-pose.y, -pose.x, 15, 0, Math.PI * 2, true); // center of robot
   ctx.strokeRect(-(pose.y + 50), -(pose.x + 50), 100, 100); // robot body
   ctx.fillRect(-(pose.y + 60), -(pose.x + 70), 20, 40); // left front wheel
   ctx.fillRect(-(pose.y - 40), -(pose.x + 70), 20, 40); // right front wheel
   ctx.fillRect(-(pose.y + 60), -(pose.x - 30), 20, 40); // left back wheel
   ctx.fillRect(-(pose.y - 40), -(pose.x - 30), 20, 40); // right back wheel
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawAxes() {
+  ctx.save();
+  ctx.beginPath();
+
+  // rotation
+  ctx.translate(-pose.y, -pose.x);
+  ctx.rotate(-pose.theta);
+  ctx.translate(pose.y, pose.x);
+
+  // draw robot coordinate axes
+  // x axis
+  ctx.moveTo(-pose.y, -pose.x);
+  ctx.lineTo(-pose.y, -(pose.x + 100));
+  ctx.lineTo(-(pose.y + 10), -(pose.x + 80));
+  ctx.lineTo(-(pose.y - 10), -(pose.x + 80));
+  ctx.lineTo(-pose.y, -(pose.x + 100));
+  // y axis
+  ctx.moveTo(-pose.y, -pose.x);
+  ctx.lineTo(-(pose.y + 100), -pose.x);
+  ctx.lineTo(-(pose.y + 80), -(pose.x + 10));
+  ctx.lineTo(-(pose.y + 80), -(pose.x - 10));
+  ctx.lineTo(-(pose.y + 100), -pose.x);
+
+  // subscript
+  ctx.font = "20px sans-serif"
+  ctx.fillText("X", -(pose.y - 10), -(pose.x + 100))
+  ctx.fillText("Y", -(pose.y + 100), -(pose.x + 10))
+
+  ctx.closePath();
   ctx.stroke();
 
   ctx.restore();
@@ -48,6 +84,7 @@ function update() {
 
   drawBarometer();
   drawRobot();
+  drawAxes();
 }
 
 // 25[fps]
