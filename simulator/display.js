@@ -60,19 +60,78 @@ function drawBarometer() {
   ctx.font = "20px sans";
 
   ctx.fillText("pose", 20, 30);
-  ctx.fillText("x: " + pose.x, 140, 30);
-  ctx.fillText("y: " + pose.y, 140, 50);
-  ctx.fillText("theta: " + pose.theta, 100, 70);
+  ctx.fillText("x: " + pose.x, 80, 50);
+  ctx.fillText("y: " + pose.y, 80, 70);
+  ctx.fillText("theta: " + pose.theta, 40, 90);
 
-  ctx.fillText("velocity", 20, 120);
-  ctx.fillText("x: " + velocity.x, 140, 120);
-  ctx.fillText("y: " + velocity.y, 140, 140);
-  ctx.fillText("theta: " + velocity.theta, 100, 160);
+  ctx.fillText("velocity", 20, 140);
+  ctx.fillText("x: " + velocity.x, 80, 160);
+  ctx.fillText("y: " + velocity.y, 80, 180);
+  ctx.fillText("theta: " + velocity.theta, 40, 200);
 
-  ctx.fillText("command", 20, 200);
-  ctx.fillText("x: " + command.x, 140, 200);
-  ctx.fillText("y: " + command.y, 140, 220);
-  ctx.fillText("theta: " + command.theta, 100, 240);
+  ctx.fillText("command", 20, 240);
+  ctx.fillText("x: " + command.x, 80, 260);
+  ctx.fillText("y: " + command.y, 80, 280);
+  ctx.fillText("theta: " + command.theta, 40, 300);
+
+  ctx.fillText("wheel velocity", 20, 340);
+  ctx.fillText("v1: " + wheel_vel.v1, 70, 360);
+  ctx.fillText("v2: " + wheel_vel.v2, 70, 380);
+  ctx.fillText("v3: " + wheel_vel.v3, 70, 400);
+  ctx.fillText("v4: " + wheel_vel.v4, 70, 420);
+}
+
+function drawVector() {
+  ctx.save();
+  ctx.beginPath();
+  ctx.strokeStyle = "red";
+
+  // rotation
+  ctx.translate(-pose.y, -pose.x);
+  ctx.rotate(-pose.theta);
+  ctx.translate(pose.y, pose.x);
+
+  // draw velocity vector of each wheel
+  // wheel 1 (right front)
+  if (wheel_vel.v1 != 0){
+    ctx.moveTo(-(pose.y - 50), -(pose.x + 50));
+    ctx.lineTo(-(pose.y - 50 - 0.3 * wheel_vel.v1), -(pose.x + 50 - 0.3 * wheel_vel.v1));
+    ctx.lineTo(-(pose.y - 50 - 0.3 * wheel_vel.v1 + Math.sign(wheel_vel.v1) * 10), -(pose.x + 50 - 0.3 * wheel_vel.v1));
+    ctx.lineTo(-(pose.y - 50 - 0.3 * wheel_vel.v1), -(pose.x + 50 - 0.3 * wheel_vel.v1 + Math.sign(wheel_vel.v1) * 10));
+    ctx.lineTo(-(pose.y - 50 - 0.3 * wheel_vel.v1), -(pose.x + 50 - 0.3 * wheel_vel.v1));
+  }
+
+  // wheel 2 (left front)
+  if (wheel_vel.v2 != 0){
+    ctx.moveTo(-(pose.y + 50), -(pose.x + 50));
+    ctx.lineTo(-(pose.y + 50 - 0.3 * wheel_vel.v2), -(pose.x + 50 + 0.3 * wheel_vel.v2));
+    ctx.lineTo(-(pose.y + 50 - 0.3 * wheel_vel.v2), -(pose.x + 50 + 0.3 * wheel_vel.v2 - Math.sign(wheel_vel.v2) * 10));
+    ctx.lineTo(-(pose.y + 50 - 0.3 * wheel_vel.v2 + Math.sign(wheel_vel.v2) * 10), -(pose.x + 50 + 0.3 * wheel_vel.v2));
+    ctx.lineTo(-(pose.y + 50 - 0.3 * wheel_vel.v2), -(pose.x + 50 + 0.3 * wheel_vel.v2));
+  }
+  
+  // wheel 3 (left back)
+  if (wheel_vel.v3 != 0){
+    ctx.moveTo(-(pose.y + 50), -(pose.x - 50));
+    ctx.lineTo(-(pose.y + 50 + 0.3 * wheel_vel.v3), -(pose.x - 50 + 0.3 * wheel_vel.v3));
+    ctx.lineTo(-(pose.y + 50 + 0.3 * wheel_vel.v3), -(pose.x - 50 + 0.3 * wheel_vel.v3 - Math.sign(wheel_vel.v3) * 10));
+    ctx.lineTo(-(pose.y + 50 + 0.3 * wheel_vel.v3 - Math.sign(wheel_vel.v3) * 10), -(pose.x - 50 + 0.3 * wheel_vel.v3));
+    ctx.lineTo(-(pose.y + 50 + 0.3 * wheel_vel.v3), -(pose.x - 50 + 0.3 * wheel_vel.v3));
+  }
+
+  // wheel 4 (right back)
+  if (wheel_vel.v4 != 0){
+    ctx.moveTo(-(pose.y - 50), -(pose.x - 50));
+    ctx.lineTo(-(pose.y - 50 + 0.3 * wheel_vel.v4), -(pose.x - 50 - 0.3 * wheel_vel.v4));
+    ctx.lineTo(-(pose.y - 50 + 0.3 * wheel_vel.v4), -(pose.x - 50 - 0.3 * wheel_vel.v4 + Math.sign(wheel_vel.v4) * 10));
+    ctx.lineTo(-(pose.y - 50 + 0.3 * wheel_vel.v4 - Math.sign(wheel_vel.v4) * 10), -(pose.x - 50 - 0.3 * wheel_vel.v4));
+    ctx.lineTo(-(pose.y - 50 + 0.3 * wheel_vel.v4), -(pose.x - 50 - 0.3 * wheel_vel.v4));
+  }
+
+  ctx.closePath();
+  ctx.stroke();
+
+  ctx.restore();
 }
 
 function update() {
@@ -86,6 +145,7 @@ function update() {
   drawBarometer();
   drawRobot();
   drawAxes();
+  drawVector();
 }
 
 // 25[fps]
