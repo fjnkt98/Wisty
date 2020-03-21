@@ -20,9 +20,24 @@
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=120truemm, clip]{images/constraint.pdf}
+  \includegraphics[width=80truemm, clip]{images/constraint.pdf}
   \caption{Constraint Area of Input Velocity Vector}
   \label{fig:constraint}
 \end{figure}
 
 \subsection{入力信号から速度ベクトルへのマッピング}
+
+ここでは3軸のアナログジョイスティックを用いてロボットを速度制御することを考える．
+それぞれのアナログジョイスティックの入力は$\dot{x}$，$\dot{y}$，$\hat{\dot{\theta}}$に対応するものとし，$\dot{x}$に対応するアナログジョイスティックの信号値を$\alpha$，$\dot{y}$に対応するものを$\beta$，$\hat{\dot{\theta}}$に対応するものを$\gamma$と表す．
+また，各ジョイスティックの信号値の範囲は-1.0～1.0であるとする．
+
+3つのジョイスティックによる入力の組み合わせをベクトル$\vec{\epsilon} = (\alpha, \beta, \gamma)^T$で表す．
+$\alpha\beta\gamma$座標系において，$\vec{\epsilon}$が取る領域は，原点を中心とする幅2の正方形となる．
+この正方形の領域を，図\ref{fig:constraint}に示す正八面体にマッピングすることで，ジョイスティックによる制御が可能になる．
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=80truemm, clip]{images/input.pdf}
+  \caption{Input Area}
+  \label{fig:input}
+\end{figure}
