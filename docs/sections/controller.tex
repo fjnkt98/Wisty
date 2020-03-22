@@ -48,5 +48,12 @@ $\alpha\beta\gamma$座標系において，$\vec{\epsilon}$が取る領域は，
 
 正方形領域から正八面体領域へのマッピングを直接行うのは困難であるため，ここでは極座標変換を用いたマッピング処理を行う．
 
-まず，$\alpha\beta\gamma$座標系における正方形領域を3次元極座標における球面へ変換する．
-入力信号ベクトル$\vec{\epsilon}$の向きと大きさを求める．
+最初の段階として，$\alpha\beta\gamma$座標系における正方形領域を3次元極座標における球面へ変換する．
+まず入力信号ベクトル$\vec{\epsilon}$の向き$(\phi, \xi)$と信号強度$\sigma$を求める．
+向き$(\phi, \xi)$はそれぞれ$\phi = \arccos{\frac{\alpha}{\sqrt{\alpha^2 + \beta^2}}}$，$\xi = \arccos{\frac{\gamma}{\sqrt{\alpha^2 + \beta^2 + \gamma^2}}}$である．
+また，$\vec{\epsilon}$の大きさは$|\vec{\epsilon}| = \sqrt{\alpha^2 + \beta^2 + \gamma^2}$から求められるが，$\alpha$，$\beta$，$\gamma$の値によっては$\vec{\epsilon}$の大きさは1.0を超えてしまう．
+これを防ぐために正規化処理を行う．
+$\vec{\epsilon}$は正方形領域内部に存在するので，$\vec{\epsilon}$の大きさの取りうる最大値は$\vec{\epsilon}$の向きによって決定される．
+$\vec{\epsilon}$が取りうる最大値で$\vec{\epsilon}$の大きさを除することで，$\vec{\epsilon}$の大きさを正規化し，信号の強度$\sigma$を求めることができる．
+
+まずは向き$(\phi, \xi)$で取りうる$|\vec{\epsilon}|$の最大値$\sigma_{\text{max}}$を求める．
