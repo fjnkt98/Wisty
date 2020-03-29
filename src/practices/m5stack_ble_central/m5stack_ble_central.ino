@@ -15,9 +15,9 @@ bool deviceConnected = false;
 
 // Communication data type definition
 struct wistySignal {
-  int alpha;
-  int beta;
-  int gamma;
+  float alpha;
+  float beta;
+  float gamma;
 };
 
 // Communication data
@@ -57,11 +57,14 @@ static void notifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic,
   memcpy(&data, pData, length);
 
   M5.Lcd.setCursor(0, 80);
-  M5.Lcd.printf("alpha: %d", data.alpha);
-  M5.Lcd.setCursor(0, 90);
-  M5.Lcd.printf("beta: %d", data.beta);
-  M5.Lcd.setCursor(0, 100);
-  M5.Lcd.printf("gamma: %d", data.gamma);
+  M5.Lcd.setTextSize(3);
+  M5.Lcd.printf("roll: %3.2f", data.alpha);
+  M5.Lcd.setCursor(0, 110);
+  M5.Lcd.setTextSize(3);
+  M5.Lcd.printf("pitch: %3.2f", data.beta);
+  M5.Lcd.setCursor(0, 140);
+  M5.Lcd.setTextSize(3);
+  M5.Lcd.printf("yaw: %3.2f", data.gamma);
 }
 
 bool doPrepare() {
@@ -110,8 +113,6 @@ void setup() {
   M5.Lcd.print("Scan start...");
   pBLEScan->setActiveScan(true);
   pBLEScan->start(10);
-
-
 }
 
 void loop() {
