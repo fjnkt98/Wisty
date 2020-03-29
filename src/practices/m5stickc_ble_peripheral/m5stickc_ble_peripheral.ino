@@ -10,7 +10,7 @@
 
 // For communication control
 BLECharacteristic *pCharacteristicTX;
-bool device_connected = false;
+bool deviceConnected = false;
 
 // Communication data type definition
 struct wistySignal {
@@ -29,11 +29,11 @@ unsigned long old = 0;
 // Override callback functions
 class WistyServerCallbacks: public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
-    device_connected = true;
+    deviceConnected = true;
   }
 
   void onDisconnect(BLEServer *pServer) {
-    device_connected = false;
+    deviceConnected = false;
   }
 };
 
@@ -69,7 +69,7 @@ void setup() {
 void loop() {
   now = millis();
   
-  if ((now - old) >= 400 && device_connected == true) {
+  if ((now - old) >= 400 && deviceConnected == true) {
     pCharacteristicTX->setValue((uint8_t*) &data, sizeof(wistySignal));
     pCharacteristicTX->notify();
 
