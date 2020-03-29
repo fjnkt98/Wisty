@@ -26,7 +26,7 @@ void setup() {
   // put your setup code here, to run once:
   M5.begin();
   M5.Lcd.setRotation(3);
-  M5.Lcd.fillScreen(BLACK);\
+  M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setCursor(0, 0);
   M5.Lcd.print("Madgiwick Filter!");
   M5.MPU6886.Init();
