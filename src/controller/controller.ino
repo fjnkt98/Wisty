@@ -100,9 +100,17 @@ void loop() {
     pitch = madgwick.getPitch();
     yaw = madgwick.getYaw();
 
-    data.alpha = roll / 180;
-    data.beta = pitch / 90;
-    data.gamma = yaw / 180;
+    data.beta = roll / 90;
+
+    if (data.beta > 1.0) {
+      data.beta = 1.0;
+    }
+    if (data.beta < -1.0) {
+      data.beta = -1.0;
+    }
+    
+    data.alpha = -pitch / 90;
+    data.gamma = yaw / 180 - 1;
 
     pCharacteristicTX->setValue((uint8_t*) &data, sizeof(WistySignal));
     pCharacteristicTX->notify();

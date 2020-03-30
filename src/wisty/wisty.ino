@@ -1,6 +1,71 @@
 #include <M5Stack.h>
 #include <BLEDevice.h>
 
+#include "m5stack_simple_servo.h"
+
+M5StackSimpleServo servo1(2, 500, 2400);  // PWM channel 2
+M5StackSimpleServo servo2(3, 500, 2400);  // PWM channel 3
+M5StackSimpleServo servo3(4, 500, 2400);  // PWM channel 4
+M5StackSimpleServo servo4(5, 500, 2400);  // PWM channel 5
+
+// Inverse kinematics for 4wd mecanum wheel
+class WistyIK {
+  private: 
+    float max_ang_vel_;   // Maximum angular velocity of the motor [rad/s]
+    float wheel_radius_;  // Radius of mecanum wheel [mm]
+    float tread_half_;    // Half of wheel tread [mm]
+    float  motor_vel[4];  // Result of IK [rad/s]
+
+  public:
+    WistyIK()
+    :max_ang_vel_(5.7596),
+    wheel_radius_(22),
+    tread_half_(50)
+    {
+    }
+
+    void calcIK(float alpha, float beta, float gamma){
+      float v_max = max_ang_vel_ * wheel_radius_;
+      float signal_strength;
+      float x_vel;
+      float y_vel;
+      float theta_vel;
+
+      // Determine the signal strength
+      if (fabs(alpha) >= fabs(beta) && fabs(alpha) >= fabs(gamma)) {
+        signal_strength = fabs(alpha);
+      } else if (fabs(beta) >= fabs(alpha) && fabs(beta) >= fabs(gamma)) {
+        signal_strength = fabs(beta);
+      } else if (fabs(gamma) >= fabs(alpha) && fabs(gamma) >= fabs(beta)) {
+        signal_strength = fabs(gamma);
+      } else {
+        signal_strength = 0;
+      }
+
+      // If the signals are all zero, the motors will be stop
+      if (alpha == 0 && beta == 0 && gamma == 0){
+        for (int i = 0; i < 4; i++) {
+          motor_vel[i] = 0.0;
+        }
+      } else {
+        x_vel = (signal_strength * alpha * v_max) / (fabs(alpha) + fabs(beta) + fabs(gamma));
+        y_vel = (signal_strength * beta * v_max) / (fabs(alpha) + fabs(beta) + fabs(gamma));
+        theta_vel = (signal_strength * gamma * v_max) / (2 * tread_half_ * (fabs(alpha) + fabs(beta) + fabs(gamma)));
+
+        motor_vel[0] = (- x_vel - y_vel - 2 * tread_half_ * theta_vel) / wheel_radius_;
+        motor_vel[1] = (  x_vel - y_vel - 2 * tread_half_ * theta_vel) / wheel_radius_;
+        motor_vel[2] = (  x_vel + y_vel - 2 * tread_half_ * theta_vel) / wheel_radius_;
+        motor_vel[3] = (- x_vel + y_vel - 2 * tread_half_ * theta_vel) / wheel_radius_;
+      }
+    }
+
+    int getMotorVel(uint8_t number){
+      return (int)((1900 * motor_vel[number - 1]) / (2 * max_ang_vel_) + 1450);
+    }
+};
+
+WistyIK wistyik;
+
 // UUID definition
 BLEUUID SERVICE_UUID("ee68c913-d61f-4973-ac40-55cbcf645709");
 BLEUUID CHARA_UUID_RX("c73926a3-319f-4150-8faf-dd66bd0f1984");
@@ -56,15 +121,20 @@ static void notifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic,
                           uint8_t* pData, size_t length, bool isNotify) {
   memcpy(&data, pData, length);
 
+  wistyik.calcIK(data.alpha, data.beta, data.gamma);
+
   M5.Lcd.setCursor(0, 80);
-  M5.Lcd.setTextSize(3);
-  M5.Lcd.printf("roll: %3.2f", data.alpha);
+  M5.Lcd.printf("Servo 1: %4d", wistyik.getMotorVel(1));
+  servo1.writeMicroseconds(wistyik.getMotorVel(1));
+  M5.Lcd.setCursor(0, 90);
+  M5.Lcd.printf("Servo 2: %4d", wistyik.getMotorVel(2));
+  servo2.writeMicroseconds(wistyik.getMotorVel(2));
+  M5.Lcd.setCursor(0, 100);
+  M5.Lcd.printf("Servo 3: %4d", wistyik.getMotorVel(3));
+  servo3.writeMicroseconds(wistyik.getMotorVel(3));
   M5.Lcd.setCursor(0, 110);
-  M5.Lcd.setTextSize(3);
-  M5.Lcd.printf("pitch: %3.2f", data.beta);
-  M5.Lcd.setCursor(0, 140);
-  M5.Lcd.setTextSize(3);
-  M5.Lcd.printf("yaw: %3.2f", data.gamma);
+  M5.Lcd.printf("Servo 4: %4d", wistyik.getMotorVel(4));
+  servo4.writeMicroseconds(wistyik.getMotorVel(4));
 }
 
 bool doPrepare() {
@@ -100,6 +170,12 @@ bool doPrepare() {
 
 void setup() {
   M5.begin();
+
+  servo1.attach(16);  // servo1 attach to GPIO 16
+  servo2.attach(17);  // servo2 attach to GPIO 17
+  servo3.attach(5);   // servo3 attach to GPIO 5
+  servo4.attach(26);  // servo4 attach to GPIO 26
+
   BLEDevice::init("");
 
   BLEScan* pBLEScan = BLEDevice::getScan();
