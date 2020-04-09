@@ -1,0 +1,39 @@
+{
+    "env": {
+        "PACKAGES_PATH": "C:/Program Files (x86)/Arduino",
+        "USER_PATH": "C:/Users/${env:USERNAME}/Documents/Arduino"
+    },
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\${env:USERNAME}\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\**",
+                "C:\\Users\\${env:USERNAME}\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.4\\**",
+                "${workspaceFolder}/**",
+                "C:\\Users\\fjnkobo\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\1.0.4\\**",
+                "C:\\Users\\fjnkobo\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\**"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${env:PACKAGES_PATH}/tools",
+                    "${env:PACKAGES_PATH}/hardware",
+                    "${env:PACKAGES_PATH}/libraries",
+                    "${env:USER_PATH}/libraries",
+                    "C:/Users/${env:USERNAME}/AppData/Local/Arduino15/packages"
+                ]
+            },
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "forcedInclude": []
+        }
+    ],
+    "version": 4
+}

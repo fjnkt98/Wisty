@@ -1,0 +1,6 @@
+{
+    "port": "COM4",
+    "board": "esp32:esp32:m5stack-core-esp32",
+    "configuration": "FlashMode=qio,FlashFreq=80,PartitionScheme=no_ota,UploadSpeed=921600,DebugLevel=none",
+    "sketch": "m5stack_ble_central.ino"
+}

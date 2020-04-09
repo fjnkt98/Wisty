@@ -1,0 +1,6 @@
+{
+    "board": "esp32:esp32:m5stick-c",
+    "configuration": "PartitionScheme=no_ota,UploadSpeed=1500000,DebugLevel=none",
+    "port": "COM5",
+    "sketch": "m5stickc_ble_peripheral.ino"
+}
